@@ -1,1 +1,21 @@
-testing
+<div id="map_wrapper">
+    <div id="map_canvas" class="mapping"></div>
+</div>
+<div id="stockists">
+    {% if records is not empty %}
+        {% for stockist in records %}
+            <div class="stockist">
+                <p class="title">{{ stockist.stockist }}</p>
+                <p>{{ stockist.address }} {{ stockist.postCode }}</p>
+                <a class="website-address" href="http://{{ stockist.website }}" target="_blank">{{ stockist.website }}</a>
+                <p>{{ stockist.county }}</p>
+                <a class="view-on-map" href="http://maps.google.com/?q={{ stockist.latitude }},{{ stockist.longitude }}" target="_blank">View On Map</a>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
+<script>
+    // write json var to a js var to be used for the map pins
+    var jsonStockists = "{{ jsonRecords }}";
+</script>

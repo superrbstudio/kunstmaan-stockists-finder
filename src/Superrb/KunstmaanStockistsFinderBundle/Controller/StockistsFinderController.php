@@ -14,13 +14,29 @@ class StockistsFinderController extends Controller
         $repository = $this->getDoctrine()
             ->getRepository('SuperrbKunstmaanStockistsFinderBundle:Stockist');
 
-        // get approved posts - newest first
-        // limit passed or defaults to 10
-        $posts = '';
+        // get all stockists - $records used for the stockists list.
+        $records = $repository->createQueryBuilder('p')
+            ->orderBy('p.stockist', 'ASC')
+            ->setMaxResults($limit)
+            ->getQuery()->getResult();
+
+        // convert to an array for json format for the map pins
+        $jsonRecords = array();
+        foreach ($records as $record) {
+            $jsonRecords[]['stockist'] = $record->getStockist();
+            $jsonRecords[]['address'] = $record->getAddress();
+            $jsonRecords[]['postcode'] = $record->getPostCode();
+            $jsonRecords[]['website'] = $record->getWebsite();
+            $jsonRecords[]['latitude'] = $record->getLatitude();
+            $jsonRecords[]['longitude'] = $record->getLongitude();
+        }
+        // encode the array
+        $jsonRecords = json_encode($jsonRecords);
+
         //render the view
         return $this->render($template, array(
-            'posts' => $posts,
+            'records' => $records,
+            'jsonRecords' => $jsonRecords
         ));
-
     }
 }
