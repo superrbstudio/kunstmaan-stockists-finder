@@ -1,0 +1,24 @@
+{
+  "name": "superrb/kunstmaan-stockists-finder",
+  "type": "library",
+  "description": "Stockists finder bundle for use with the KunstmaanBundles CMS",
+  "keywords": [
+    "cms"
+  ],
+  "homepage": "https://gitlab.superrb.com/kuma/KunstmaanStockistsFinderBundle",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Superrb Team",
+      "email": "tech@superrb.com"
+    }
+  ],
+  "require": {
+    "kunstmaan/bundles-cms": "~3.0"
+  },
+  "autoload": {
+    "psr-4": {"Superrb\\": "src/Superrb/"}
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
