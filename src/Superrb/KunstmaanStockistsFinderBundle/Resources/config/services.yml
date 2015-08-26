@@ -1,0 +1,5 @@
+services:
+    SuperrbKunstmaanStockistsFinderBundle.menu.adaptor.modules:
+        class: Superrb\KunstmaanStockistsFinderBundle\Helper\Menu\ModulesMenuAdaptor
+        tags:
+            -  { name: 'kunstmaan_admin.menu.adaptor' }

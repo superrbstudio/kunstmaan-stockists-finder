@@ -1,0 +1,5 @@
+
+superrbkunstmaanstockistsfinderbundle_stockist_admin_list:
+    resource: @SuperrbKunstmaanStockistsFinderBundle/Controller/StockistAdminListController.php
+    type:     annotation
+    prefix:   /admin/stockist/
