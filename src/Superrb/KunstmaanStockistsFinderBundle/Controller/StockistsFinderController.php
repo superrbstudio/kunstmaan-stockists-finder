@@ -22,13 +22,15 @@ class StockistsFinderController extends Controller
 
         // convert to an array for json format for the map pins
         $jsonRecords = array();
-        foreach ($records as $record) {
-            $jsonRecords[]['stockist'] = $record->getStockist();
-            $jsonRecords[]['address'] = $record->getAddress();
-            $jsonRecords[]['postcode'] = $record->getPostCode();
-            $jsonRecords[]['website'] = $record->getWebsite();
-            $jsonRecords[]['latitude'] = $record->getLatitude();
-            $jsonRecords[]['longitude'] = $record->getLongitude();
+        foreach ($records as $k => $record) {
+            $jsonRecords[$k] = array(
+                'stockist' => $record->getStockist(),
+                'address' => $record->getAddress(),
+                'postcode' => $record->getPostCode(),
+                'website' => $record->getWebsite(),
+                'latitude' => $record->getLatitude(),
+                'longitude' => $record->getLongitude()
+            );
         }
         // encode the array
         $jsonRecords = json_encode($jsonRecords);
