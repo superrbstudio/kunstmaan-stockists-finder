@@ -35,7 +35,7 @@ function mapInitialize() {
         // Allow each marker to have an info window
         google.maps.event.addListener(marker, 'click', (function(marker, i) {
             return function() {
-                infoWindow.setContent('<h3>' + jsonData[i]['stockist'] + '</h3><p>' + jsonData[i]['address'] + ' ' + jsonData[i]['post_code'] + '</p><p>' + jsonData[i]['county'] + '</p><p><a href="http://' + jsonData[i]['website'] + '" target="_blank"' + jsonData[i]['website'] + '</p><a href="http://maps.google.com/?q=' + jsonData[i]['latitude'] + ',' + jsonData[i]['longitude'] + '" target="_blank">View on map</a>');
+                infoWindow.setContent('<div class="info-marker"><p class="title">' + jsonData[i]['stockist'] + '</p><p>' + jsonData[i]['address'] + ' ' + jsonData[i]['postcode'] + '</p><p>' + jsonData[i]['county'] + '</p><p><a href="http://' + jsonData[i]['website'] + '" target="_blank">' + jsonData[i]['website'] + '</a></p><a class="view-on-map" href="http://maps.google.com/?q=' + jsonData[i]['latitude'] + ',' + jsonData[i]['longitude'] + '" target="_blank">View on map</a></div>');
                 infoWindow.open(map, marker);
             }
         })(marker, i));
