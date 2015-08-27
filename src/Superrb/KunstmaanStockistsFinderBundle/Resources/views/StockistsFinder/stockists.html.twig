@@ -1,16 +1,36 @@
-<div id="map_wrapper">
-    <div id="map_canvas" class="mapping"></div>
-</div>
-<div id="stockists" data-stockists='{{ jsonRecords | raw }}'>
-    {% if records is not empty %}
-        {% for stockist in records %}
-            <div class="stockist">
-                <p class="title">{{ stockist.stockist }}</p>
-                <p>{{ stockist.address }} {{ stockist.postCode }}</p>
-                <a class="website-address" href="http://{{ stockist.website }}" target="_blank">{{ stockist.website }}</a>
-                <p>{{ stockist.county }}</p>
-                <a class="view-on-map" href="http://maps.google.com/?q={{ stockist.latitude }},{{ stockist.longitude }}" target="_blank">View On Map</a>
+<div id="stockists-wrapper">
+    <div id="map_wrapper">
+        <div id="map_canvas" class="mapping"></div>
+    </div>
+
+    {{ form_start(form, {'attr' : {'class' : 'stockists-finder'}, 'action' : path('superrbkunstmaanstockistsfinderbundle_stockists_form')}) }}
+
+        {{ form_errors(form) }}
+        <div class="search-wrapper">
+            {#<div class="country">#}
+            {#{{ form_row(form.country) }}#}
+            {#</div>#}
+            <div class="postcode">
+                {{ form_row(form.postcode) }}
             </div>
-        {% endfor %}
-    {% endif %}
+            <div class="submit">
+                {{ form_row(form.submit, { 'label': 'Search' }) }}
+            </div>
+        </div>
+
+    {{ form_end(form) }}
+
+    <div id="stockists" data-stockists='{{ jsonRecords | raw }}'>
+        {% if records is not empty %}
+            {% for stockist in records %}
+                <div class="stockist">
+                    <p class="title">{{ stockist.stockist }}</p>
+                    <p>{{ stockist.address }} {{ stockist.postCode }}</p>
+                    <a class="website-address" href="http://{{ stockist.website }}" target="_blank">{{ stockist.website }}</a>
+                    <p>{{ stockist.county }}</p>
+                    <a class="view-on-map" href="http://maps.google.com/?q={{ stockist.latitude }},{{ stockist.longitude }}" target="_blank">View On Map</a>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
 </div>

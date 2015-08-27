@@ -6,6 +6,29 @@ function stockistsMap() {
 }
 
 function mapInitialize() {
+
+    var container = $('#stockists-wrapper');
+
+    //catch the submission of the form
+    $('form.stockists-finder').submit(function(e){
+        //lets disable the button also, incase they try to click it super quick
+        $(this).find('button').attr('disabled', 'disabled').text("Searching...");
+        //create and submit the form through AJAX
+        $.ajax({
+            url: $(this).attr('action'),
+            type : $(this).attr('method'),
+            data : $(this).serialize(),
+            success : function(data) {
+                // replace the content of the container with the new data
+                container.html(data);
+                //re-init this function
+                stockistsMap();
+            }
+        });
+
+        e.preventDefault();
+    });
+
     var jsonData = $('#stockists').data('stockists');
     var map;
     var bounds = new google.maps.LatLngBounds();
@@ -58,5 +81,4 @@ function mapInitialize() {
     var boundsListener = google.maps.event.addListener((map), 'bounds_changed', function(event) {
         google.maps.event.removeListener(boundsListener);
     });
-
 }
