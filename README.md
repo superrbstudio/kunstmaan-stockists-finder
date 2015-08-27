@@ -77,6 +77,24 @@ stof_doctrine_extensions:
 
 ### Outputting Stockists on the front end
 
+```bash
+app/console assets:install --symlink
+```
+
+load the new js file - add the following to .groundcontrolrc
+```bash
+"footer": [
+    "web/bundles/superrbkunstmaanstockistsfinder/js/stockists-finder.js",
+],
+```
+
+Call the js function from your page
+```twig
+{% block scripts %}
+    stockistsMap();
+{% endblock %}
+```
+
 You can output a list of stockists on the front end simply be rendering a controller action. This could also be added to a page part template to allow more control.
 
 ```twig
