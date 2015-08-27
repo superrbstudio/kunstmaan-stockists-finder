@@ -88,6 +88,13 @@ load the new js file - add the following to .groundcontrolrc
 ],
 ```
 
+add the route
+```twig
+superrbkunstmaanstockistsfinderbundle_stockists_form:
+    pattern: /stockistsFormSubmission
+    defaults: { _controller: SuperrbKunstmaanStockistsFinderBundle:StockistsFinder:stockists }
+```
+
 Call the js function from your page
 ```twig
 {% block scripts %}
