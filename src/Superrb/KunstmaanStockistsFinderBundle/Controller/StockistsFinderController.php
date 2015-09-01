@@ -20,7 +20,6 @@ class StockistsFinderController extends Controller
             ->setMaxResults($limit)
             ->getQuery()->getResult();
 
-
         if($request->isMethod('POST')) {
             $data = $request->request->get('stockists_finder_form');
             $postcode = $data['postcode'];
@@ -29,9 +28,11 @@ class StockistsFinderController extends Controller
             if(!empty($country)) {
                 $ids = $this->searchStockists($country, $postcode);
                 if(!empty($ids)) {
+                    // implode the ids ready for the query
+                    $idString = count($ids) > 0 ? implode(',', $ids) : $ids ;
                     $records = $repository->createQueryBuilder('p')
                         ->orderBy('p.stockist', 'ASC')
-                        ->where("p.id IN(" . $ids . ")")
+                        ->where("p.id IN(" . $idString . ")")
                         ->getQuery()->getResult();
                 }
             }
@@ -42,7 +43,9 @@ class StockistsFinderController extends Controller
 
         // convert to an array for json format for the map pins
         $jsonRecords = array();
+        $orderedRecords = array();
         foreach ($records as $k => $record) {
+            $orderedRecords[$record->getId()] = $record;
             $jsonRecords[$k] = array(
                 'stockist' => $record->getStockist(),
                 'address' => $record->getAddress(),
@@ -54,6 +57,15 @@ class StockistsFinderController extends Controller
                 'longitude' => $record->getLongitude()
             );
         }
+
+        if(!empty($ids)) {
+            $newOrderedRecords = array();
+            foreach($ids as $id) {
+                $newOrderedRecords[$id] = $orderedRecords[$id];
+            }
+            $records = $newOrderedRecords;
+        }
+
         // encode the array
         $jsonRecords = json_encode($jsonRecords);
 
@@ -90,7 +102,7 @@ class StockistsFinderController extends Controller
 
             //write the switch condition for either limit or radius.
             // define query end as it has to be in order
-            $queryEnd = 'ORDER BY distance ';
+            $queryEnd = 'ORDER BY distance ASC';
             $conditions = '';
             if (!empty($postcode) || !empty($countryCode)) {
                 if (!empty($countryCode)) {
@@ -123,10 +135,6 @@ class StockistsFinderController extends Controller
                 $ids[] = $result['id'];
             }
 
-            // implode the ids ready for the query
-            if (count($ids) > 0) {
-                $ids = implode(',', $ids);
-            }
             // pass the ids back to the view
             return $ids;
 
