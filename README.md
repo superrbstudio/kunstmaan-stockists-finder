@@ -102,6 +102,17 @@ Call the js function from your page
 {% endblock %}
 ```
 
+Make sure the map dimensions are set
+```css
+#map_wrapper {
+    height: 400px;
+}
+#map_canvas {
+    width: 100%;
+    height: 100%;
+}
+```
+
 You can output a list of stockists on the front end simply be rendering a controller action. This could also be added to a page part template to allow more control.
 
 ```twig
