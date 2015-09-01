@@ -6,6 +6,7 @@ function stockistsMap() {
 }
 
 function mapInitialize() {
+    $('body').removeClass("loading");
 
     var container = $('#stockists-wrapper');
 
@@ -15,6 +16,7 @@ function mapInitialize() {
         //submit the form when a selection is made
         if($("#stockists_finder_form_country").val() != 'GB') {
             $('.search-wrapper').removeClass('active');
+            $('body').addClass("loading");
             $(this).closest('form').submit();
         } else {
             $('.search-wrapper').addClass('active');
