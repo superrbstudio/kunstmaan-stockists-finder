@@ -29,21 +29,21 @@ class Stockist extends \Kunstmaan\AdminBundle\Entity\AbstractEntity
     /**
      * @var string
      *
-     * @ORM\Column(name="post_code", type="string", length=10)
+     * @ORM\Column(name="post_code", type="string", length=10, nullable=true)
      */
     private $postCode;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="website", type="string", length=255)
+     * @ORM\Column(name="website", type="string", length=255, nullable=true)
      */
     private $website;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="county", type="string", length=100)
+     * @ORM\Column(name="county", type="string", length=100, nullable=true)
      */
     private $county;
 
