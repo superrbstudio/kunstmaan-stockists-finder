@@ -6,9 +6,9 @@
     {{ form_start(form, {'attr' : {'class' : 'stockists-finder'}, 'action' : path('superrbkunstmaanstockistsfinderbundle_stockists_form')}) }}
 
         {{ form_errors(form) }}
-        {#<div class="country">#}
-            {#{{ form_row(form.country) }}#}
-        {#</div>#}
+        <div class="country">
+            {{ form_row(form.country) }}
+        </div>
         <div class="search-wrapper">
             <div class="postcode">
                 {{ form_row(form.postcode) }}

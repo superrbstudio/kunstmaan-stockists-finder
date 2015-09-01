@@ -4,7 +4,8 @@ namespace Superrb\KunstmaanStockistsFinderBundle\Form;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\Intl\Intl;
 
 /**
@@ -12,6 +13,13 @@ use Symfony\Component\Intl\Intl;
  */
 class StockistsFinderType extends AbstractType
 {
+    protected $em;
+
+    public function __construct(EntityManager $em)
+    {
+        $this->em = $em;
+    }
+
     /**
      * Builds the form.
      *
@@ -25,7 +33,22 @@ class StockistsFinderType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $countries = Intl::getRegionBundle()->getCountryNames();
+
+        $records = $this->em->createQueryBuilder()
+            ->select('s.country')
+            ->from('SuperrbKunstmaanStockistsFinderBundle:stockist', 's')
+            ->getQuery()->getResult();
+
+        $countriesList = Intl::getRegionBundle()->getCountryNames();
+
+        $countries = array();
+
+        foreach ($records as $country) {
+            $code = $country['country'];
+            $name = $countriesList[$code];
+            $countries[$code] = $name;
+        }
+
         $builder
             ->add('postcode', 'text', array(
                 'required' => true,
@@ -34,13 +57,9 @@ class StockistsFinderType extends AbstractType
                     'placeholder' => 'Postcode'
                 ),
             ))
-//            ->add('country', 'country', array(
-//                'choices' => $countries,
-//                'preferred_choices' => array(
-//                    'GB', // United Kingdom
-//                    'IE', // Ireland
-//                ),
-//            ))
+           ->add('country', 'country', array(
+               'choices' => $countries,
+           ))
             ->add('submit', 'submit');
     }
 

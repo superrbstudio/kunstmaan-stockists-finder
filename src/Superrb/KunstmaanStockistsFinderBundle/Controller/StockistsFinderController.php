@@ -10,7 +10,6 @@ class StockistsFinderController extends Controller
     //pass the request to the action
     public function stockistsAction(Request $request, $limit = 10, $template = 'SuperrbKunstmaanStockistsFinderBundle:StockistsFinder:stockists.html.twig', $ids = null)
     {
-
         // get the table
         $repository = $this->getDoctrine()
             ->getRepository('SuperrbKunstmaanStockistsFinderBundle:Stockist');
@@ -51,7 +50,7 @@ class StockistsFinderController extends Controller
         // encode the array
         $jsonRecords = json_encode($jsonRecords);
 
-        $form = $this->createForm(new StockistsFinderType());
+        $form = $this->createForm(new StockistsFinderType($this->getDoctrine()->getManager()));
 
         //render the view
         return $this->render($template, array(
