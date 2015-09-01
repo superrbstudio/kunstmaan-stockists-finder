@@ -20,10 +20,14 @@ class StockistsFinderController extends Controller
             ->setMaxResults($limit)
             ->getQuery()->getResult();
 
+        $countryPost = '';
+        $postcodePost = '';
         if($request->isMethod('POST')) {
             $data = $request->request->get('stockists_finder_form');
             $postcode = $data['postcode'];
             $country = \Symfony\Component\Locale\Locale::getDisplayCountries('en')[$data['country']];
+            $countryPost = $data['country'];
+            $postcodePost = $postcode;
 
             if(!empty($country)) {
                 $ids = $this->searchStockists($country, $postcode);
@@ -63,6 +67,8 @@ class StockistsFinderController extends Controller
             'records' => $records,
             'jsonRecords' => $jsonRecords,
             'form' => $form->createView(),
+            'country' => $countryPost,
+            'postcode' => $postcodePost
         ));
     }
 
