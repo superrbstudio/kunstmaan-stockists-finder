@@ -90,6 +90,8 @@ class StockistsFinderController extends Controller
                 $conditions = ' HAVING distance < ' . $this->container->getParameter('stockistssearchbyvalue') . ' ' . $queryEnd;
             } elseif($this->container->getParameter('stockistssearchby') == 'limit') {
                 $conditions = $queryEnd . ' LIMIT ' . $this->container->getParameter('stockistssearchbyvalue');
+            } else {
+                $conditions = $queryEnd;
             }
             // we have to do the query like this as doctrine does not support acos function
             $stmt = $this->getEntityManager()
