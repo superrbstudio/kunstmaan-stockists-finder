@@ -34,8 +34,6 @@ class StockistAdminListConfigurator extends AbstractDoctrineORMAdminListConfigur
         $this->addField('postCode', 'Post code', true);
         $this->addField('website', 'Website', true);
         $this->addField('county', 'County', true);
-        $this->addField('latitude', 'Latitude', true);
-        $this->addField('longitude', 'Longitude', true);
     }
 
     /**
@@ -48,8 +46,6 @@ class StockistAdminListConfigurator extends AbstractDoctrineORMAdminListConfigur
         $this->addFilter('postCode', new ORM\StringFilterType('postCode'), 'Post code');
         $this->addFilter('website', new ORM\StringFilterType('website'), 'Website');
         $this->addFilter('county', new ORM\StringFilterType('county'), 'County');
-        $this->addFilter('latitude', new ORM\StringFilterType('latitude'), 'Latitude');
-        $this->addFilter('longitude', new ORM\StringFilterType('longitude'), 'Longitude');
     }
 
     /**
