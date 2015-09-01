@@ -8,11 +8,13 @@
 
         {{ form_errors(form) }}
         <div class="country">
-            {{ form_row(form.country) }}
+            {{ form_label(form.country) }}
+            {{ form_widget(form.country, { value : country }) }}
         </div>
-        <div class="search-wrapper">
+        <div class="search-wrapper {% if(country == 'GB') %}active{% endif %}">
             <div class="postcode">
-                {{ form_row(form.postcode) }}
+                {{ form_label(form.postcode) }}
+                {{ form_widget(form.postcode, { value : postcode }) }}
             </div>
             <div class="submit">
                 {{ form_row(form.submit, { 'label': 'Search' }) }}
