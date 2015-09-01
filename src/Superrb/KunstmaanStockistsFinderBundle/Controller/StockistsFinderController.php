@@ -23,7 +23,8 @@ class StockistsFinderController extends Controller
         if($request->isMethod('POST')) {
             $data = $request->request->get('stockists_finder_form');
             $postcode = $data['postcode'];
-            $country = $data['country'];
+            $country = \Symfony\Component\Locale\Locale::getDisplayCountries('en')[$data['country']];
+
             if(!empty($country)) {
                 $ids = $this->searchStockists($country, $postcode);
                 if(!empty($ids)) {
@@ -86,12 +87,17 @@ class StockistsFinderController extends Controller
             // define query end as it has to be in order
             $queryEnd = 'ORDER BY distance';
             $conditions = '';
-            if ($this->container->getParameter('stockistsfindersearchby') == 'radius') {
-                $conditions = ' HAVING distance < ' . $this->container->getParameter('stockistsfindersearchbyvalue') . ' ' . $queryEnd;
-            } elseif($this->container->getParameter('stockistsfindersearchby') == 'limit') {
-                $conditions = $queryEnd . ' LIMIT ' . $this->container->getParameter('stockistsfindersearchbyvalue');
+            if (!empty($postcode) || !empty($country)) {
+                if ($this->container->getParameter('stockistsfindersearchby') == 'radius') {
+                    $conditions = ' HAVING distance < ' . $this->container->getParameter('stockistsfindersearchbyvalue') . ' ' . $queryEnd;
+                } elseif($this->container->getParameter('stockistsfindersearchby') == 'limit') {
+                    $conditions = $queryEnd . ' LIMIT ' . $this->container->getParameter('stockistsfindersearchbyvalue');
+                } else {
+                    $conditions = $queryEnd;
+                }
             } else {
                 $conditions = $queryEnd;
+
             }
             // we have to do the query like this as doctrine does not support acos function
             $stmt = $this->getEntityManager()
