@@ -59,6 +59,8 @@ class StockistsFinderType extends AbstractType
             ))
            ->add('country', 'country', array(
                'choices' => $countries,
+                'placeholder' => 'Select a country',
+                'empty_data'  => null
            ))
             ->add('submit', 'submit');
     }
