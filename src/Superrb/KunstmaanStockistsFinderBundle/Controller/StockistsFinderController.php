@@ -30,7 +30,6 @@ class StockistsFinderController extends Controller
                     $records = $repository->createQueryBuilder('p')
                         ->orderBy('p.stockist', 'ASC')
                         ->where("p.id IN(" . $ids . ")")
-                        ->setMaxResults($limit)
                         ->getQuery()->getResult();
                 }
             }
@@ -83,13 +82,23 @@ class StockistsFinderController extends Controller
             $latitude = $lookup->results[0]->geometry->location->lat;
             $longitude = $lookup->results[0]->geometry->location->lng;
 
+            //write the switch condition for either limit or radius.
+            // define query end as it has to be in order
+            $queryEnd = 'ORDER BY distance';
+            $conditions = '';
+            if ($this->container->getParameter('stockistssearchby') == 'radius') {
+                $conditions = ' HAVING distance < ' . $this->container->getParameter('stockistssearchbyvalue') . ' ' . $queryEnd;
+            } elseif($this->container->getParameter('stockistssearchby') == 'limit') {
+                $conditions = $queryEnd . ' LIMIT ' . $this->container->getParameter('stockistssearchbyvalue');
+            }
             // we have to do the query like this as doctrine does not support acos function
             $stmt = $this->getEntityManager()
                 ->getConnection()
                 ->prepare("SELECT sb_ksfb_stockist.id, ( 3959 * acos( cos( radians(" . $latitude . ") ) * cos( radians(sb_ksfb_stockist.latitude) ) * cos( radians(sb_ksfb_stockist.longitude) - radians(" . $longitude . ") ) + sin( radians(" . $latitude . ") ) * sin( radians(sb_ksfb_stockist.latitude) ) ) ) AS distance
             FROM sb_ksfb_stockist
             WHERE sb_ksfb_stockist.latitude != '' AND sb_ksfb_stockist.longitude != ''
-            ORDER BY distance LIMIT 4");
+            " . $conditions);
+
             $stmt->execute();
             $records = $stmt->fetchAll();
 
