@@ -86,10 +86,10 @@ class StockistsFinderController extends Controller
             // define query end as it has to be in order
             $queryEnd = 'ORDER BY distance';
             $conditions = '';
-            if ($this->container->getParameter('stockistssearchby') == 'radius') {
-                $conditions = ' HAVING distance < ' . $this->container->getParameter('stockistssearchbyvalue') . ' ' . $queryEnd;
-            } elseif($this->container->getParameter('stockistssearchby') == 'limit') {
-                $conditions = $queryEnd . ' LIMIT ' . $this->container->getParameter('stockistssearchbyvalue');
+            if ($this->container->getParameter('stockistsfindersearchby') == 'radius') {
+                $conditions = ' HAVING distance < ' . $this->container->getParameter('stockistsfindersearchbyvalue') . ' ' . $queryEnd;
+            } elseif($this->container->getParameter('stockistsfindersearchby') == 'limit') {
+                $conditions = $queryEnd . ' LIMIT ' . $this->container->getParameter('stockistsfindersearchbyvalue');
             } else {
                 $conditions = $queryEnd;
             }
