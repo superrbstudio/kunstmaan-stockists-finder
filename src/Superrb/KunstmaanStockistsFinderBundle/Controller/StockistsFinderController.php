@@ -23,14 +23,18 @@ class StockistsFinderController extends Controller
         if($request->isMethod('POST')) {
             $data = $request->request->get('stockists_finder_form');
             $postcode = $data['postcode'];
-            $ids = $this->searchStockists($postcode);
-            if(!empty($ids)) {
-                $records = $repository->createQueryBuilder('p')
-                    ->orderBy('p.stockist', 'ASC')
-                    ->where("p.id IN(" . $ids . ")")
-                    ->setMaxResults($limit)
-                    ->getQuery()->getResult();
-            } else {
+            $country = $data['country'];
+            if(!empty($country)) {
+                $ids = $this->searchStockists($country, $postcode);
+                if(!empty($ids)) {
+                    $records = $repository->createQueryBuilder('p')
+                        ->orderBy('p.stockist', 'ASC')
+                        ->where("p.id IN(" . $ids . ")")
+                        ->setMaxResults($limit)
+                        ->getQuery()->getResult();
+                }
+            }
+            else {
                 //display a message to say no results - will show all
             }
         }
@@ -41,6 +45,8 @@ class StockistsFinderController extends Controller
             $jsonRecords[$k] = array(
                 'stockist' => $record->getStockist(),
                 'address' => $record->getAddress(),
+                'county' => $record->getCounty(),
+                'country' => $record->getCountry(),
                 'postcode' => $record->getPostCode(),
                 'website' => $record->getWebsite(),
                 'latitude' => $record->getLatitude(),
@@ -60,50 +66,48 @@ class StockistsFinderController extends Controller
         ));
     }
 
-    public function searchStockists($postcode)
+    public function searchStockists($country, $postcode)
     {
-
-        //check if country is not Ireland
-        //$countryCode = $value['country'];
-
         //check if postcode is not empty
         if (!empty($postcode)) {
             //look up postcode results
             $lookup = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?address=' . urlencode($postcode));
-            $lookup = json_decode($lookup);
-            if (isset($lookup->status) and $lookup->status == 'OK' and isset($lookup->results) and isset($lookup->results[0])) {
-                //continue
-                $latitude = $lookup->results[0]->geometry->location->lat;
-                $longitude = $lookup->results[0]->geometry->location->lng;
+        } else {
+            //look up country results
+            $lookup = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?address=' . urlencode($country));
+        }
 
-                // we have to do the query like this as doctrine does not support acos function
-                $stmt = $this->getEntityManager()
-                    ->getConnection()
-                    ->prepare("SELECT sb_ksfb_stockist.id, ( 3959 * acos( cos( radians(" . $latitude . ") ) * cos( radians(sb_ksfb_stockist.latitude) ) * cos( radians(sb_ksfb_stockist.longitude) - radians(" . $longitude . ") ) + sin( radians(" . $latitude . ") ) * sin( radians(sb_ksfb_stockist.latitude) ) ) ) AS distance
-                FROM sb_ksfb_stockist
-                WHERE sb_ksfb_stockist.latitude != '' AND sb_ksfb_stockist.longitude != ''
-                HAVING distance < 2
-                ORDER BY distance");
-                $stmt->execute();
-                $records = $stmt->fetchAll();
+        $lookup = json_decode($lookup);
+        if (isset($lookup->status) and $lookup->status == 'OK' and isset($lookup->results) and isset($lookup->results[0])) {
+            //continue
+            $latitude = $lookup->results[0]->geometry->location->lat;
+            $longitude = $lookup->results[0]->geometry->location->lng;
 
-                $ids = array();
-                //get ids from results
-                foreach ($records as $result) {
-                    $ids[] = $result['id'];
-                }
+            // we have to do the query like this as doctrine does not support acos function
+            $stmt = $this->getEntityManager()
+                ->getConnection()
+                ->prepare("SELECT sb_ksfb_stockist.id, ( 3959 * acos( cos( radians(" . $latitude . ") ) * cos( radians(sb_ksfb_stockist.latitude) ) * cos( radians(sb_ksfb_stockist.longitude) - radians(" . $longitude . ") ) + sin( radians(" . $latitude . ") ) * sin( radians(sb_ksfb_stockist.latitude) ) ) ) AS distance
+            FROM sb_ksfb_stockist
+            WHERE sb_ksfb_stockist.latitude != '' AND sb_ksfb_stockist.longitude != ''
+            ORDER BY distance LIMIT 4");
+            $stmt->execute();
+            $records = $stmt->fetchAll();
 
-                // implode the ids ready for the query
-                if (count($ids) > 0) {
-                    $ids = implode(',', $ids);
-                }
-
-                // pass the ids back to the view
-                return $ids;
-
-            } else {
-                //errors
+            $ids = array();
+            //get ids from results
+            foreach ($records as $result) {
+                $ids[] = $result['id'];
             }
+
+            // implode the ids ready for the query
+            if (count($ids) > 0) {
+                $ids = implode(',', $ids);
+            }
+            // pass the ids back to the view
+            return $ids;
+
+        } else {
+            //errors
         }
     }
 

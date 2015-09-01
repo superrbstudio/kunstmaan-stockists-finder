@@ -9,6 +9,18 @@ function mapInitialize() {
 
     var container = $('#stockists-wrapper');
 
+    $('.country select').on('change', function() {
+        //clear the postcode
+        $(this).closest('form').find('input#stockists_finder_form_postcode').val('');
+        //submit the form when a selection is made
+        if($("#stockists_finder_form_country").val() != 'GB') {
+            $('.search-wrapper').removeClass('active');
+            $(this).closest('form').submit();
+        } else {
+            $('.search-wrapper').addClass('active');
+        }
+    });
+
     //catch the submission of the form
     $('form.stockists-finder').submit(function(e){
         //lets disable the button also, incase they try to click it super quick
