@@ -47,6 +47,14 @@ class Stockist extends \Kunstmaan\AdminBundle\Entity\AbstractEntity
      */
     private $county;
 
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="country", type="string", length=100)
+     */
+    private $country;
+
     /**
      * @var string
      *
@@ -180,6 +188,30 @@ class Stockist extends \Kunstmaan\AdminBundle\Entity\AbstractEntity
     public function getCounty()
     {
         return $this->county;
+    }
+
+    /**
+     * Set country
+     *
+     * @param string $country
+     *
+     * @return Stockist
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
+
+        return $this;
+    }
+
+    /**
+     * Get country
+     *
+     * @return string
+     */
+    public function getCountry()
+    {
+        return $this->country;
     }
 
     /**

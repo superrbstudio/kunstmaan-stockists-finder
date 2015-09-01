@@ -4,6 +4,8 @@ namespace Superrb\KunstmaanStockistsFinderBundle\Form;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Intl\Intl;
 
 /**
  * The type for Stockist
@@ -23,11 +25,21 @@ class StockistAdminType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $countries = Intl::getRegionBundle()->getCountryNames();
+
         $builder->add('stockist');
         $builder->add('address');
         $builder->add('postCode');
         $builder->add('website');
         $builder->add('county');
+        $builder->add('county');
+        $builder->add('country', 'country', array(
+            'choices' => $countries,
+            'preferred_choices' => array(
+                'GB', // United Kingdom
+                'IE', // Ireland
+            ),
+        ));
         $builder->add('latitude');
         $builder->add('longitude');
     }
