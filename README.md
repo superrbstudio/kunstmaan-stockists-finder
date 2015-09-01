@@ -113,6 +113,12 @@ Make sure the map dimensions are set
 }
 ```
 
+Add the Search parameters
+```yml
+    stockistsfindersearchby:          'limit'
+    stockistsfindersearchbyvalue:      '4'
+```
+
 You can output a list of stockists on the front end simply be rendering a controller action. This could also be added to a page part template to allow more control.
 
 ```twig
