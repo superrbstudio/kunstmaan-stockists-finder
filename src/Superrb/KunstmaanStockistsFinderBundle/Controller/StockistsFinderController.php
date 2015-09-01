@@ -20,14 +20,11 @@ class StockistsFinderController extends Controller
             ->setMaxResults($limit)
             ->getQuery()->getResult();
 
-        $countryPost = '';
-        $postcodePost = '';
+
         if($request->isMethod('POST')) {
             $data = $request->request->get('stockists_finder_form');
             $postcode = $data['postcode'];
-            $country = \Symfony\Component\Locale\Locale::getDisplayCountries('en')[$data['country']];
-            $countryPost = $data['country'];
-            $postcodePost = $postcode;
+            $country = $data['country'];
 
             if(!empty($country)) {
                 $ids = $this->searchStockists($country, $postcode);
@@ -67,20 +64,22 @@ class StockistsFinderController extends Controller
             'records' => $records,
             'jsonRecords' => $jsonRecords,
             'form' => $form->createView(),
-            'country' => $countryPost,
-            'postcode' => $postcodePost
+            'country' => !empty($country) ? $country : '',
+            'postcode' => !empty($postcode) ? $postcode : ''
         ));
     }
 
-    public function searchStockists($country, $postcode)
+    public function searchStockists($countryCode, $postcode)
     {
+        $countryName = \Symfony\Component\Locale\Locale::getDisplayCountries('en')[$countryCode];
+
         //check if postcode is not empty
         if (!empty($postcode)) {
             //look up postcode results
             $lookup = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?address=' . urlencode($postcode));
         } else {
             //look up country results
-            $lookup = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?address=' . urlencode($country));
+            $lookup = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?address=' . urlencode($countryName));
         }
 
         $lookup = json_decode($lookup);
@@ -91,19 +90,21 @@ class StockistsFinderController extends Controller
 
             //write the switch condition for either limit or radius.
             // define query end as it has to be in order
-            $queryEnd = 'ORDER BY distance';
+            $queryEnd = 'ORDER BY distance ';
             $conditions = '';
-            if (!empty($postcode) || !empty($country)) {
+            if (!empty($postcode) || !empty($countryCode)) {
+                if (!empty($countryCode)) {
+                    $conditions .= 'AND sb_ksfb_stockist.country = "' . $countryCode . '" ';
+                }
                 if ($this->container->getParameter('stockistsfindersearchby') == 'radius') {
-                    $conditions = ' HAVING distance < ' . $this->container->getParameter('stockistsfindersearchbyvalue') . ' ' . $queryEnd;
+                    $conditions .= ' HAVING distance < ' . $this->container->getParameter('stockistsfindersearchbyvalue') . ' ' . $queryEnd;
                 } elseif($this->container->getParameter('stockistsfindersearchby') == 'limit') {
-                    $conditions = $queryEnd . ' LIMIT ' . $this->container->getParameter('stockistsfindersearchbyvalue');
+                    $conditions .= $queryEnd . ' LIMIT ' . $this->container->getParameter('stockistsfindersearchbyvalue');
                 } else {
-                    $conditions = $queryEnd;
+                    $conditions .= $queryEnd;
                 }
             } else {
-                $conditions = $queryEnd;
-
+                $conditions .= $queryEnd;
             }
             // we have to do the query like this as doctrine does not support acos function
             $stmt = $this->getEntityManager()
