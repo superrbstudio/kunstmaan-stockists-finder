@@ -72,7 +72,19 @@ function mapInitialize() {
         // Allow each marker to have an info window
         google.maps.event.addListener(marker, 'click', (function(marker, i) {
             return function() {
-                infoWindow.setContent('<div class="info-marker"><p class="title">' + jsonData[i]['stockist'] + '</p><p>' + jsonData[i]['address'] + ' ' + jsonData[i]['postcode'] + '</p><p>' + jsonData[i]['county'] + '</p><p><a href="http://' + jsonData[i]['website'] + '" target="_blank">' + jsonData[i]['website'] + '</a></p><a class="view-on-map" href="http://maps.google.com/?q=' + jsonData[i]['latitude'] + ',' + jsonData[i]['longitude'] + '" target="_blank">View on map</a></div>');
+                var postcode = '';
+                if(jsonData[i]['postcode'] != null) {
+                    postcode = ' ' + jsonData[i]['postcode'];
+                }
+                var county = '';
+                if(jsonData[i]['county'] != null) {
+                    county = '<p>' + jsonData[i]['county'] + '</p>';
+                }
+                var website = '';
+                if(jsonData[i]['website'] != null) {
+                    website = '<p><a href="http://' + jsonData[i]['website'] + '" target="_blank">' + jsonData[i]['website'] + '</a></p>';
+                }
+                infoWindow.setContent('<div class="info-marker"><p class="title">' + jsonData[i]['stockist'] + '</p><p>' + jsonData[i]['address'] + postcode + '</p>' + county + website + '</div>');
                 infoWindow.open(map, marker);
             }
         })(marker, i));
