@@ -113,7 +113,7 @@ Make sure the map dimensions are set
 }
 ```
 
-Add the Search parameters
+Add the Search parameters to your parameters.yml
 ```yml
     stockistsfindersearchby:          'limit'
     stockistsfindersearchbyvalue:      '4'
