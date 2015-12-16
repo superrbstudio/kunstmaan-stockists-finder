@@ -1,12 +1,20 @@
 function stockistsMap() {
-    // Asynchronously Load the map API
-    var script = document.createElement('script');
-    script.src = "http://maps.googleapis.com/maps/api/js?sensor=false&callback=mapInitialize";
-    document.body.appendChild(script);
+    if($('html').hasClass('maps-api-loaded')) {
+        //init the map as api already loaded
+        mapInitialize();
+    } else {
+        // Asynchronously Load the map API (first time load)
+        var script = document.createElement('script');
+        script.src = "http://maps.googleapis.com/maps/api/js?sensor=false&callback=mapInitialize";
+        document.body.appendChild(script);
+    }
 }
 
 function mapInitialize() {
     $('body').removeClass("loading");
+
+    //add a class to the body to indicate that google maps has loaded
+    $('html').addClass('maps-api-loaded');
 
     var container = $('#stockists-wrapper');
 
@@ -92,16 +100,6 @@ function mapInitialize() {
         // Automatically center the map fitting all markers on the screen
         map.fitBounds(bounds);
     }
-
-    var styles = [
-        {
-            "stylers": [
-                { "saturation": -100 }
-            ]
-        }
-    ]
-
-    map.setOptions({styles: styles});
 
     // Override our map zoom level once our fitBounds function runs (Make sure it only runs once)
     var boundsListener = google.maps.event.addListener((map), 'bounds_changed', function(event) {
