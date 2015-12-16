@@ -101,6 +101,16 @@ function mapInitialize() {
         map.fitBounds(bounds);
     }
 
+    var styles = [
+        {
+            "stylers": [
+                { "saturation": -100 }
+            ]
+        }
+    ]
+
+    map.setOptions({styles: styles});
+
     // Override our map zoom level once our fitBounds function runs (Make sure it only runs once)
     var boundsListener = google.maps.event.addListener((map), 'bounds_changed', function(event) {
         google.maps.event.removeListener(boundsListener);
