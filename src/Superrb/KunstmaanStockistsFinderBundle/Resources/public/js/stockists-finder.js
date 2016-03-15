@@ -5,7 +5,7 @@ function stockistsMap() {
     } else {
         // Asynchronously Load the map API (first time load)
         var script = document.createElement('script');
-        script.src = "http://maps.googleapis.com/maps/api/js?sensor=false&callback=mapInitialize";
+        script.src = "https://maps.googleapis.com/maps/api/js?sensor=false&callback=mapInitialize";
         document.body.appendChild(script);
     }
 }

@@ -67,4 +67,12 @@ class StockistAdminListConfigurator extends AbstractDoctrineORMAdminListConfigur
     {
         return 'Stockist';
     }
+
+    /**
+     * @return int
+     */
+    public function getLimit()
+    {
+        return 50;
+    }
 }
