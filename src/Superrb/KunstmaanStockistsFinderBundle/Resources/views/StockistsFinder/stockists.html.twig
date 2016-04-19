@@ -26,7 +26,7 @@
         <div class="loader"></div>
     </div>
 
-    <div id="stockists" data-stockists='{{ jsonRecords | raw }}'>
+    <div id="stockists" data-stockists='{{ jsonRecords | escape }}'>
         {% if records is not empty %}
             {% for stockist in records %}
                 <div class="stockist">
