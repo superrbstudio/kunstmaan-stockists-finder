@@ -108,12 +108,12 @@ class StockistsFinderController extends Controller
                 if (!empty($countryCode)) {
                     $conditions .= 'AND sb_ksfb_stockist.country = "' . $countryCode . '" ';
                 }
-                if ($this->container->getParameter('stockistsfindersearchby') == 'radius') {
-                    $conditions .= ' HAVING distance < ' . $this->container->getParameter('stockistsfindersearchbyvalue') . ' ' . $queryEnd;
-                } elseif($this->container->getParameter('stockistsfindersearchby') == 'limit') {
-                    $conditions .= $queryEnd . ' LIMIT ' . $this->container->getParameter('stockistsfindersearchbyvalue');
-                } else {
-                    $conditions .= $queryEnd;
+                if (!empty($postcode)) {
+                    if ($this->container->getParameter('stockistsfindersearchby') == 'radius') {
+                        $conditions .= ' HAVING distance < ' . $this->container->getParameter('stockistsfindersearchbyvalue') . ' ' . $queryEnd;
+                    } elseif($this->container->getParameter('stockistsfindersearchby') == 'limit') {
+                        $conditions .= $queryEnd . ' LIMIT ' . $this->container->getParameter('stockistsfindersearchbyvalue');
+                    }
                 }
             } else {
                 $conditions .= $queryEnd;
