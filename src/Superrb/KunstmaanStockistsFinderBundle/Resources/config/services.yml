@@ -3,3 +3,8 @@ services:
         class: Superrb\KunstmaanStockistsFinderBundle\Helper\Menu\ModulesMenuAdaptor
         tags:
             -  { name: 'kunstmaan_admin.menu.adaptor' }
+    SuperrbKunstmaanStockistsFinderBundle.form.stockists_finder:
+        class: Superrb\KunstmaanStockistsFinderBundle\Form\StockistsFinderType
+        arguments: ["@doctrine.orm.entity_manager"]
+        tags:
+            - { name: form.type }

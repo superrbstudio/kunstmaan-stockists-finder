@@ -7,6 +7,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Intl\Intl;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\CountryType;
 
 /**
  * The type for Stockist
@@ -46,22 +48,20 @@ class StockistsFinderType extends AbstractType
         foreach ($records as $country) {
             $code = $country['country'];
             $name = $countriesList[$code];
-            $countries[$code] = $name;
+            $countries[$name] = $code;
         }
 
         $builder
-            ->add('postcode', 'text', array(
+            ->add('postcode', TextType::class, array(
                 'required' => true,
                 'label' => 'Postcode',
                 'attr' => array(
                     'placeholder' => 'Postcode'
                 ),
             ))
-           ->add('country', 'country', array(
+           ->add('country', CountryType::class, array(
                 'choices' => $countries,
-                'placeholder' => 'Select a country',
-                'empty_data'  => null,
-                'choices_as_values' => false,
+                'empty_value' => 'Select a country',
            ))
             ->add('submit', 'submit');
     }
@@ -71,7 +71,7 @@ class StockistsFinderType extends AbstractType
      *
      * @return string The name of this type
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'stockists_finder_form';
     }

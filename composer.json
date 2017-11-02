@@ -14,7 +14,7 @@
     }
   ],
   "require": {
-    "kunstmaan/bundles-cms": "~3.0"
+    "kunstmaan/bundles-cms": "~4.0"
   },
   "autoload": {
     "psr-4": {"Superrb\\": "src/Superrb/"}

@@ -42,7 +42,7 @@ Add the following to your `app/config/routes.yml`
 
 ```yml
 superrbkunstmaanstockistsfinderbundle_stockist_admin_list:
-    resource: @SuperrbKunstmaanStockistsFinderBundle/Controller/StockistAdminListController.php
+    resource: "@SuperrbKunstmaanStockistsFinderBundle/Controller/StockistAdminListController.php"
     type:     annotation
     prefix:   /{_locale}/admin/stockist/
 ```
@@ -54,12 +54,12 @@ Remember to remove the `/{_locale}/` from the admin list route if you are using 
 You can use Doctrine Migrations or a schema update, it is your choice
 
 ```bash
-app/console doctrine:migrations:diff
-app/console doctrine:migrations:migrate
+bin/console doctrine:migrations:diff
+bin/console doctrine:migrations:migrate
 ```
 or
 ```bash
-app/console doctrine:schema:update --force
+bin/console doctrine:schema:update --force
 ```
 
 ### Step 5: Add required config
@@ -78,7 +78,7 @@ stof_doctrine_extensions:
 ### Outputting Stockists on the front end
 
 ```bash
-app/console assets:install --symlink
+bin/console assets:install --symlink
 ```
 
 load the new js file - add the following to .groundcontrolrc

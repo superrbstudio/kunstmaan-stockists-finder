@@ -4,6 +4,7 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Superrb\KunstmaanStockistsFinderBundle\Form\StockistsFinderType;
+use Symfony\Component\Locale\Locale;
 
 class StockistsFinderController extends Controller
 {
@@ -69,7 +70,7 @@ class StockistsFinderController extends Controller
         // encode the array
         $jsonRecords = json_encode($jsonRecords);
 
-        $form = $this->createForm(new StockistsFinderType($this->getDoctrine()->getManager()));
+        $form = $this->createForm(StockistsFinderType::class);
 
         //render the view
         return $this->render($template, array(
@@ -83,7 +84,7 @@ class StockistsFinderController extends Controller
 
     public function searchStockists($countryCode, $postcode)
     {
-        $countryName = \Symfony\Component\Locale\Locale::getDisplayCountries('en')[$countryCode];
+        $countryName = Locale::getDisplayCountries('en')[$countryCode];
 
         //check if postcode is not empty
         if (!empty($postcode)) {
