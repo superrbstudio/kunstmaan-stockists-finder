@@ -1,6 +1,7 @@
 services:
     SuperrbKunstmaanStockistsFinderBundle.menu.adaptor.modules:
         class: Superrb\KunstmaanStockistsFinderBundle\Helper\Menu\ModulesMenuAdaptor
+        arguments: ["@security.authorization_checker"]
         tags:
             -  { name: 'kunstmaan_admin.menu.adaptor' }
     SuperrbKunstmaanStockistsFinderBundle.form.stockists_finder:

@@ -35,6 +35,16 @@ class StockistAdminListController extends AdminListController
     /**
      * The index action
      *
+     * @Route("/", name="superrbkunstmaanstockistsfinderbundle_admin_stockist_false")
+     */
+    public function falseIndexAction(Request $request)
+    {
+        return $this->indexAction($request);
+    }
+
+    /**
+     * The index action
+     *
      * @Route("/", name="superrbkunstmaanstockistsfinderbundle_admin_stockist")
      */
     public function indexAction(Request $request)

@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\Intl\Intl;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 /**
  * The type for Stockist
@@ -61,9 +62,9 @@ class StockistsFinderType extends AbstractType
             ))
            ->add('country', CountryType::class, array(
                 'choices' => $countries,
-                'empty_value' => 'Select a country',
+                'placeholder' => 'Select a country',
            ))
-            ->add('submit', 'submit');
+            ->add('submit', SubmitType::class);
     }
 
     /**

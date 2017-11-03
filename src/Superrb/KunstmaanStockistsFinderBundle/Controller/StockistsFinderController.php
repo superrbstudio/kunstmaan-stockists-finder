@@ -4,7 +4,7 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Superrb\KunstmaanStockistsFinderBundle\Form\StockistsFinderType;
-use Symfony\Component\Locale\Locale;
+use Symfony\Component\Intl\Intl;
 
 class StockistsFinderController extends Controller
 {
@@ -84,7 +84,7 @@ class StockistsFinderController extends Controller
 
     public function searchStockists($countryCode, $postcode)
     {
-        $countryName = Locale::getDisplayCountries('en')[$countryCode];
+        $countryName = Intl::getRegionBundle()->getCountryName($countryCode);
 
         //check if postcode is not empty
         if (!empty($postcode)) {

@@ -15,12 +15,29 @@ class ModulesMenuAdaptor implements MenuAdaptorInterface
      */
     public function adaptChildren(MenuBuilder $menu, array &$children, MenuItem $parent = null, Request $request = null)
     {
-        if (!is_null($parent) && 'KunstmaanAdminBundle_modules' == $parent->getRoute()) {
+        if (is_null($parent)) {
             $menuItem = new TopMenuItem($menu);
-            $menuItem->setRoute('superrbkunstmaanstockistsfinderbundle_admin_stockist');
-            $menuItem->setInternalName('Stockist');
-            $menuItem->setParent($parent);
+            $menuItem
+                ->setRoute('superrbkunstmaanstockistsfinderbundle_admin_stockist_false')
+                ->setLabel('Stockists')
+                ->setUniqueId('Stockists')
+                ->setFolder(true)
+                ->setParent($parent);
             if (stripos($request->attributes->get('_route'), $menuItem->getRoute()) === 0) {
+                $menuItem->setActive(true);
+            }
+            $children[] = $menuItem;
+        }
+
+        if (!is_null($parent) && 'superrbkunstmaanstockistsfinderbundle_admin_stockist_false' == $parent->getRoute()) {
+            // Posts
+            $menuItem = new TopMenuItem($menu);
+            $menuItem
+                ->setRoute('superrbkunstmaanstockistsfinderbundle_admin_stockist')
+                ->setLabel('Stockists')
+                ->setUniqueId('Stockists')
+                ->setParent($parent);
+            if ($request->attributes->get('_route') == 'superrbkunstmaanstockistsfinderbundle_admin_stockist_false') {
                 $menuItem->setActive(true);
                 $parent->setActive(true);
             }
